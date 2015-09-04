@@ -7,9 +7,57 @@
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
   </head>
   <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
+    <div class="mixpanel-platform-section">
+      <table style="width:100%">
+        <tr>
+          <td><div id="lablel1" style="float: left;">Funnel 1</div></td>
+      </tr>
+       <tr>
+          <td><div id="eventSelect1a" style="float: left;"></div></td>
+          </tr>
+        <tr>
+          <td><div id="eventSelect2a" style="float: left;"></div></td>
+          </tr>
+        <tr>
+          <td><div id="eventSelect3a" style="float: left;"></div></td>
+          </table>
+            <!--<div id="by" class="mixpanel-platform-label" style="margin-left: 10px; display: none;">by</div>-->
+      <!--<div id="propSelect" style="float: left;"></div>-->
+      <div style="clear: both;"></div>
+      <div id="graph"></div>
+    </div>
+    <div id="table"></div>
     <script>
-      // Run queries and display results here
+      // get values for all the events you wish to include in funnel a
+      var e1a = $('#eventSelect1a').MPEventSelect();
+      e1a.on('change', function(e, selection) {                     // Do something when an option is selected
+        e1a = selection;
+      });
+      var e2a = $('#eventSelect2a').MPEventSelect();
+      e2a.on('change', function(e, selection) {                     // Do something when an option is selected
+        e2a = selection;
+      });
+      var e3a = $('#eventSelect3a').MPEventSelect();
+      e3a.on('change', function(e, selection) {                     // Do something when an option is selected
+        e3a = selection;
+      });
+       // get value for date window
+      var dateSelect  = $('#dateSelect').MPDatepicker();
+      var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
+    <script>
+       // build query to generate data
+      var runQuery = function(){
+        // debugger;
+        var dateRange = dateSelect.MPDatepicker('value');
+        
+        MP.api.funnel(e1a, e2a, e3a, e4).done(function(results) {
+          // debugger;
+          console.log(results);
+          eventGraph.MPChart('setData', results);
+        });
+        }
+      e4.on('change', runQuery);
+      dateSelect.on('change', runQuery);
     </script>
   </body>
 </html>
