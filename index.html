@@ -41,6 +41,13 @@
       e3a.on('change', function(e, selection) {                     // Do something when an option is selected
         e3a = selection;
       });
+      
+         // get value for terminating event 
+      var e4 = $('#eventSelect4').MPEventSelect();
+      e4.on('change', function(e, selection) {                     // Do something when an option is selected
+        e4 = selection;
+      });
+
        // get value for date window
       var dateSelect  = $('#dateSelect').MPDatepicker();
       var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
