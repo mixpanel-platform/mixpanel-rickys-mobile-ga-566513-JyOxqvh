@@ -80,6 +80,21 @@
       var dateSelect  = $('#dateSelect').MPDatepicker();
       var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
 
+      var handleFunnelData = function(data) {
+        var total_step_counts = [];
+        for (date in data.data) {
+            for (var step = 0; step < data.data[date].steps.length; step++) {
+                var temp_step = data.data[date].steps[step];
+                if (total_step_counts.length < step + 1) {
+                    total_step_counts.push({});
+                }
+                if (!total_step_counts[step].hasOwnProperty('event')) {
+                    total_step_counts[step].event = temp_step.event;
+                    total_step_counts[step].count = 0;
+                }
+                total_step_counts[step].count += temp_step.count;
+            }
+        }
       // build query to generate data
       var runQuery = function(){
         // debugger;
@@ -87,7 +102,7 @@
         
         MP.api.funnel(e1a, e2a, e3a, e4).done(function(results) {
           // debugger;
-          console.log(results);
+          console.log(handleFunnelData(results));
           eventGraph.MPChart('setData', results);
         });
         }
