@@ -43,41 +43,44 @@
     <div id="table"></div>
     <script>
       // get values for all the events you wish to include in funnel a
-      var e1a = $('#eventSelect1a').MPEventSelect();
-      e1a.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e1a_el = $('#eventSelect1a').MPEventSelect();
+      e1a_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e1a = selection;
       });
-      var e2a = $('#eventSelect2a').MPEventSelect();
-      e2a.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e2a_el = $('#eventSelect2a').MPEventSelect();
+      e2a_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e2a = selection;
       });
-      var e3a = $('#eventSelect3a').MPEventSelect();
-      e3a.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e3a_el = $('#eventSelect3a').MPEventSelect();
+      e3a_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e3a = selection;
       });
       
       // get values for all the events you wish to include in funnel b
-      var e1b = $('#eventSelect1b').MPEventSelect();
-      e1b.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e1b_el = $('#eventSelect1b').MPEventSelect();
+      e1b_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e1b = selection;
       });
-      var e2b = $('#eventSelect2b').MPEventSelect();
-      e2b.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e2b_el = $('#eventSelect2b').MPEventSelect();
+      e2b_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e2b = selection;
       });
-      var e3b = $('#eventSelect3b').MPEventSelect();
-      e3b.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e3b_el = $('#eventSelect3b').MPEventSelect();
+      e3b_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e3b = selection;
       });
       
       // get value for terminating event 
-      var e4 = $('#eventSelect4').MPEventSelect();
-      e4.on('change', function(e, selection) {                     // Do something when an option is selected
+      var e4_el = $('#eventSelect4').MPEventSelect();
+      e4_el.on('change', function(e, selection) {                     // Do something when an option is selected
         e4 = selection;
+        runQuery();
       });
 
       // get value for date window
       var dateSelect  = $('#dateSelect').MPDatepicker();
+      dateSelect.on('change', runQuery);
+      
       var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
 
       var handleFunnelData = function(data) {
@@ -95,20 +98,22 @@
                 total_step_counts[step].count += temp_step.count;
             }
         }
-      // build query to generate data
+      }
       var runQuery = function(){
-        // debugger;
         var dateRange = dateSelect.MPDatepicker('value');
-        
-        MP.api.funnel(e1a, e2a, e3a, e4).done(function(results) {
-          // debugger;
-          console.log(handleFunnelData(results));
-          eventGraph.MPChart('setData', results);
+        var compareOne = MP.api.funnel(e1a, e2a, e3a, e4);
+        var compareTwo = MP.api.funnel(e1b, e2b, e3b, e4);
+        $.when(compareOne, compareTwo).done(function(d1, d2) {
+          
+          console.log(handleFunnelData(d1),handleFunnelData(d2))
+          // console.log(handleFunnelData(results));
+          // eventGraph.MPChart('setData', results);
         });
         }
-      e4.on('change', runQuery);
-      dateSelect.on('change', runQuery);
-      }
+      $(function(){
+        
+      })
+      
       
     </script>
   </body>
