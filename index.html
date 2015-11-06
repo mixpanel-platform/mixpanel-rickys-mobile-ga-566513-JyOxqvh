@@ -84,28 +84,15 @@
       var eventGraph  = $('#graph').MPChart({chartType: 'bar'});
 
       var handleFunnelData = function(data) {
-        var total_step_counts = [];
-        for (date in data.data) {
-            for (var step = 0; step < data.data[date].steps.length; step++) {
-                var temp_step = data.data[date].steps[step];
-                if (total_step_counts.length < step + 1) {
-                    total_step_counts.push({});
-                }
-                if (!total_step_counts[step].hasOwnProperty('event')) {
-                    total_step_counts[step].event = temp_step.event;
-                    total_step_counts[step].count = 0;
-                }
-                total_step_counts[step].count += temp_step.count;
-            }
-        }
+        
       }
+
       var runQuery = function(){
         var dateRange = dateSelect.MPDatepicker('value');
         var compareOne = MP.api.funnel(e1a, e2a, e3a, e4);
         var compareTwo = MP.api.funnel(e1b, e2b, e3b, e4);
         $.when(compareOne, compareTwo).done(function(d1, d2) {
-          
-          console.log(handleFunnelData(d1),handleFunnelData(d2))
+          console.log(d1, d2)
           // console.log(handleFunnelData(results));
           // eventGraph.MPChart('setData', results);
         });
